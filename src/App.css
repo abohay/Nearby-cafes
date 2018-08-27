@@ -1,0 +1,47 @@
+/* map default styles*/
+#map {
+  height: 100vh;
+  width:80%;
+}
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+body{
+  margin:0;
+}
+
+/* main styles. */
+main{
+  width:100%;
+  display: flex;
+}
+
+/* aside styles. */
+aside{
+  width:20%;
+  height:100vh;
+}
+
+/* search styles. */
+.searchForm{
+  width:90%;
+  margin:0 auto;
+}
+#searchLabel{
+  display:block;
+  text-align:center;
+  margin:10px;
+}
+#searchQuery{
+  height:30px;
+  width:100%;
+}
+.searchResult{
+  list-style:none;
+}
+.searchResult li:hover{
+  text-decoration:underline;
+  cursor: pointer;
+}

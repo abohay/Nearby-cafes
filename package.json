@@ -2,7 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://abohay.github.io/Neighborhood-Map/src/",
+  "homepage": "https://abohay.github.io/Neighborhood-Map/,
   "dependencies": {
     "axios": "^0.18.0",
     "escape-regexp": "^0.0.1",

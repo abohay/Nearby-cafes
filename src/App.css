@@ -45,3 +45,8 @@ aside{
   text-decoration:underline;
   cursor: pointer;
 }
+.gm-err-icon img{
+	content:url("https://cdn1.iconfinder.com/data/icons/hawcons/32/698761-icon-20-sad-face-eyebrows-512.png");
+  width:128px;
+  height:128px;
+}

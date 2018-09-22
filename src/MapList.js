@@ -9,7 +9,6 @@ class MapList extends Component {
     query: '',
     venues: this.props.venues
   }
-
   // function that show the marker when you click
   showMarker = (venue) => {
       this.props.markers.map((marker) => {
@@ -20,21 +19,21 @@ class MapList extends Component {
   }
 
   // update the search input and filter the list of venues
-  updateQuery = (query) => {
-      this.setState({ query })
-
-      let filteredVenues
-
-      if(this.state.query && (this.state.query !== '')) {
-          const match = new RegExp(escapeRegExp(query), 'i');
-          filteredVenues = this.props.venues.filter((place) => match.test(place.venue.name))
-          this.setState({venues: filteredVenues})
-          this.props.updateVenues(venues)
-      } else {
-          this.setState({venues: this.props.venues})
-      }
-  }
-
+     updateQuery = (query) => {
+         this.setState({ query })
+         let filteredVenues
+         const match = new RegExp(escapeRegExp(query), 'i');
+         filteredVenues = this.props.venues.filter((place) => match.test(place.venue.name))
+         this.setState({ venues: filteredVenues })
+         //zoom places depend on query
+         let back = filteredVenues.map(place => place.venue.name)
+         this.props.updateVenues(back)
+         //to render all markers if query is empty
+         if (query.length < 1) {
+             let places = this.props.venues.map(place => place.venue.name);
+             this.props.updateVenues(places)
+         }
+     }
   render(){
     return(
       <aside>
@@ -42,6 +41,7 @@ class MapList extends Component {
             <label htmlFor="searchQuery" id="searchLabel">Cafes List</label>
             <input
                 id="searchQuery"
+                aria-label="search Cafes"
                 type="text"
                 placeholder="Type the Search text here"
                 onChange={(e) => this.updateQuery(e.target.value)}
@@ -53,6 +53,8 @@ class MapList extends Component {
                 {this.state.venues.map((venue, index) => (
                     <li
                         key={index}
+                        tabIndex={index}
+                        className="item"
                         onClick={() => this.showMarker(venue.venue.name)}
                     >
                         {venue.venue.name}

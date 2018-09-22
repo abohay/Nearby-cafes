@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ReactDOM from 'react-dom';
 import './App.css';
 import axios from 'axios'
 import MapList from './MapList'
@@ -11,11 +12,6 @@ class App extends Component {
     markers: [],
   }
 
-  //function that will update the venues according to the search input
-  updateVenues = (newVenues) => {
-    this.setState({filteredVenues: newVenues})
-  }
-
   // asynchronous request to the venues from foursquare api
   componentDidMount(){
     this.getVenues()
@@ -26,7 +22,6 @@ class App extends Component {
     LoadScript("https://maps.googleapis.com/maps/api/js?key=AIzaSyCtrInC9FOB1Jkicx9el5JWJs8zHXz3xvI&callback=initMap")
     window.initMap = this.initMap; {/* this help us to assign our value to the map  */}
   }
-
   initMap = () => {
     var map = new window.google.maps.Map(document.getElementById('map'), {
       center: {lat: 31.042457, lng: 30.47275},
@@ -40,13 +35,18 @@ class App extends Component {
         map: map,
         title:myVenue.venue.name
       });
+      this.setState({ map: map })
       this.state.markers.push(marker)
       marker.addListener('click', function() {
         infowindow.setContent(contentString);
         infowindow.open(map, marker);
       });
     })
+    window.gm_authFailure = function () {
+      alert('Error In Map Load')
+    }
   }
+
   // getting the data from foursquare api
   getVenues = () => {
     const endPoint = "https://api.foursquare.com/v2/venues/explore?"
@@ -67,19 +67,33 @@ class App extends Component {
       },this.renderMap())
     })
     .catch(error =>{
-      console.log("ERROR!! "+error)
+      alert("Hello! Sorry There's a problem with foursquare api");
     })
   }
 
+  //function that will update the venues according to the search input
+   updateVenues = (arrTitles) => {
+     let currentMarkers = [];
+     currentMarkers = this.state.markers.filter(marker => arrTitles.includes(marker.title))
+     this.state.markers.forEach(marker => {
+       if(arrTitles.includes(marker.title) === true){
+         marker.setVisible(true);
+       }else{
+         marker.setVisible(false);
+       }
+     });
+   }
   render() {
       return (
         <main>
-          <MapList
-            venues={this.state.venues}
-            markers={this.state.markers}
-            updateVenues= {this.updateVenues}
-          />
-          <div id="map"></div>
+          {this.state.venues.length > 1 &&
+              <MapList
+                venues={this.state.venues}
+                markers={this.state.markers}
+                updateVenues={this.updateVenues}
+              />
+          }
+          <div id="map" role="application" aria-label="map"></div>
         </main>
     );
   }
